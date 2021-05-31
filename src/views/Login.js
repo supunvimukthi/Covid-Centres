@@ -79,7 +79,9 @@ function Login({setToken, setUser}) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic '+btoa(credentials['username']+':'+credentials['password']), 
+        'Authorization': 'Basic '+btoa(credentials['username']+':'+credentials['password']),
+        'Access-Control-Allow-Origin': 'http://ec2-54-77-11-148.eu-west-1.compute.amazonaws.com',
+        'Access-Control-Allow-Headers':'Authorization' 
       }
     })
       .then(data => data.json()).catch((e)=>notify('bc','Invalid Login : '+String(e),3))
