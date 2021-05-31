@@ -16,158 +16,270 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import NotificationAlert from "react-notification-alert";
 // reactstrap components
+import { Card, CardHeader, CardBody, CardTitle, Row, Col, Table } from "reactstrap";
 import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Table,
-  Row,
-  Col,
-} from "reactstrap";
+  format,
+  formatDistance,
+  formatRelative,
+  isThisSecond,
+  subDays,
+} from 'date-fns';
+import LoadingOverlay from 'react-loading-overlay';
 
-function Tables() {
-  
+
+
+
+function Icons(props) {
+
+  const notificationAlert = React.useRef();
+  const notify = (place, text, color) => {
+    // var color = Math.floor(Math.random() * 5 + 1);
+    var type;
+    switch (color) {
+      case 1:
+        type = "primary";
+        break;
+      case 2:
+        type = "success";
+        break;
+      case 3:
+        type = "danger";
+        break;
+      case 4:
+        type = "warning";
+        break;
+      case 5:
+        type = "info";
+        break;
+      default:
+        break;
+    }
+    var options = {};
+    options = {
+      place: place,
+      message: (
+        <div>
+          <div>
+            {text}
+          </div>
+        </div>
+      ),
+      type: type,
+      icon: "nc-icon nc-bell-55",
+      autoDismiss: 7,
+    };
+    notificationAlert.current.notificationAlert(options);
+  };
+
+  async function getCentresData() {
+    // console.log(data)
+    return fetch('http://ec2-54-77-11-148.eu-west-1.compute.amazonaws.com:5100/v1/covid/centres', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-tokens': JSON.parse(localStorage.getItem('token')),
+      }
+    })
+      .then(data => data.json()).catch((e) => console.log(e))
+  }
+
+  async function submitData(data) {
+    console.log(data)
+    return fetch('http://ec2-54-77-11-148.eu-west-1.compute.amazonaws.com:5100/v1/covid/centre/bed', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-tokens': JSON.parse(localStorage.getItem('token')),
+      },
+      body: JSON.stringify({
+        'beds': Number(data['beds']),
+        'time': new Date().getTime(),
+        'desc': data['note'],
+        'username': centre['username']
+
+      })
+    })
+      .then(data => data.json()).catch((e) => notify('bc', String(e), 3))
+  }
+
+  async function getData(username) {
+    // console.log(data)
+    return fetch('http://ec2-54-77-11-148.eu-west-1.compute.amazonaws.com:5100/v1/covid/centre/beds', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-tokens': JSON.parse(localStorage.getItem('token')),
+      },
+      body: JSON.stringify({
+        'username': username
+
+      })
+    })
+      .then(data => data.json()).catch((e) => notify('bc', String(e), 3))
+  }
+
+
+  const [location, setLocation] = useState("");
+  const [name, setName] = useState("");
+  const [beds, setBeds] = useState();
+  const [note, setNote] = useState("");
+  const [logs, setLogs] = useState([]);
+  const [centre, setCentre] = useState();
+  const [centres, setCentres] = useState([]);
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    // console.log(username,password)
+    // if(!username || !password ){
+    //   showToastMessage(10000,'Empty fields not allowed',ERROR)
+    //   return;
+    // }
+    const token = await submitData({
+      beds,
+      note
+    });
+
+    if ('error' in token) {
+      notify('bc', token['error'], 3)
+    } else {
+      notify('bc', token['results'], 2)
+    }
+
+    props.setActive(true)
+    var log = await getData(centre['username']);
+    props.setActive(false)
+    setLogs(log['results'].reverse())
+    setBeds(0)
+    setNote("")
+    // if (token){
+    //   console.log(token['data'][0]['username'])
+    //   localStorage.setItem('data',JSON.stringify(token['data'][0]))
+    //   setUser(token['data'][0]['username'])
+    //   setToken(token['token']);
+    // }else{
+    //   console.log('error')
+    //   // showToastMessage(5000,'Login Invalid. Please check your login information',ERROR)
+    // }
+
+  }
+
+  useEffect(async () => {
+    props.setActive(true)
+    getCentresData().then((cents) => {
+
+      if (('error' in cents) && cents['error'] == 'Signature has expired') {
+        localStorage.clear()
+        window.location.pathname = 'login'
+      }
+      console.log(cents['results'][1])
+      setCentres(cents['results'])
+      setCentre(cents['results'][1])
+      console.log(centre)
+      getData(cents['results'][1]['username']).then(log => {
+        props.setActive(false)
+        console.log(log)
+        setLogs(log['results'].reverse())
+      })
+
+    })
+
+
+
+
+  }, [])
+
   return (
     <>
+
       <div className="content">
-        <Row>
-          <Col md="12">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h4">Simple Table</CardTitle>
-              </CardHeader>
-              <CardBody>
-                <Table responsive>
-                  <thead className="text-primary">
-                    <tr>
-                      <th>Name</th>
-                      <th>Country</th>
-                      <th>City</th>
-                      <th className="text-right">Salary</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Dakota Rice</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                      <td className="text-right">$36,738</td>
-                    </tr>
-                    <tr>
-                      <td>Minerva Hooper</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                      <td className="text-right">$23,789</td>
-                    </tr>
-                    <tr>
-                      <td>Sage Rodriguez</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                      <td className="text-right">$56,142</td>
-                    </tr>
-                    <tr>
-                      <td>Philip Chaney</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                      <td className="text-right">$38,735</td>
-                    </tr>
-                    <tr>
-                      <td>Doris Greene</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                      <td className="text-right">$63,542</td>
-                    </tr>
-                    <tr>
-                      <td>Mason Porter</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                      <td className="text-right">$78,615</td>
-                    </tr>
-                    <tr>
-                      <td>Jon Porter</td>
-                      <td>Portugal</td>
-                      <td>Gloucester</td>
-                      <td className="text-right">$98,615</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col md="12">
-            <Card className="card-plain">
-              <CardHeader>
-                <CardTitle tag="h4">Table on Plain Background</CardTitle>
-                <p className="card-category">
-                  Here is a subtitle for this table
+        <NotificationAlert ref={notificationAlert} />
+
+
+          <Row>
+            <Col md="12">
+              <Card className="demo-icons">
+                <CardHeader>
+                  <CardTitle tag="h5">Update available beds for {centre ? centre['name'] : ''} in {(centre ? centre['location'] : '') + ' - ' + (centre ? centre['province'] : '')}</CardTitle>
+                  {/* <p className="card-category">
+                  Handcrafted by our friends from{" "}
+                  <a href="https://nucleoapp.com/?ref=1712">NucleoApp</a>
+                </p> */}
+                </CardHeader>
+                <CardBody className="all-icons">
+                  <div class="row">
+
+                    <div class="col-md-12">
+                      <div class="form-group"><label for="exampleForm.ControlSelect1" class="form-label">Select Covid Centre</label>
+                        <select value={centre ? centre['name'] : ''} onChange={e => {
+                          props.setActive(true)
+                          setCentre(centres.find(x => x['name'] == e.target.value))
+                          getData(centres.find(x => x['name'] == e.target.value)['username']).then(log => {
+                            console.log(log)
+                            props.setActive(false)
+                            setLogs(log['results'].reverse())
+                          })
+
+                        }} id="exampleForm.ControlSelect1" class="form-control">
+                          {centres.map(x => <option>{x['name']}</option>)}
+                        </select></div>
+                      <div class="form-group"><label for="exampleForm.ControlInput1" class="form-label">Available Beds</label>
+                        <input value={beds} onChange={e => setBeds(e.target.value)} placeholder="Number of beds available" type="number" id="exampleForm.ControlInput1" class="form-control" /></div>
+
+                      <div class="form-group">
+                        <label for="exampleForm.ControlTextarea1" class="form-label">Additional Note</label>
+                        <textarea value={note} onChange={e => setNote(e.target.value)} rows="3" id="exampleForm.ControlTextarea1" class="form-control"></textarea>
+                        <button onClick={handleSubmit} type="button" class="btn btn-primary">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col md="12">
+              <Card>
+                <CardHeader>
+                  <CardTitle tag="h4">Past Data Logs</CardTitle>
+                  <p className="card-category">
+                    This table shows data updates in the past
                 </p>
-              </CardHeader>
-              <CardBody>
-                <Table responsive>
-                  <thead className="text-primary">
-                    <tr>
-                      <th>Name</th>
-                      <th>Country</th>
-                      <th>City</th>
-                      <th className="text-right">Salary</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Dakota Rice</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                      <td className="text-right">$36,738</td>
-                    </tr>
-                    <tr>
-                      <td>Minerva Hooper</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                      <td className="text-right">$23,789</td>
-                    </tr>
-                    <tr>
-                      <td>Sage Rodriguez</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                      <td className="text-right">$56,142</td>
-                    </tr>
-                    <tr>
-                      <td>Philip Chaney</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                      <td className="text-right">$38,735</td>
-                    </tr>
-                    <tr>
-                      <td>Doris Greene</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                      <td className="text-right">$63,542</td>
-                    </tr>
-                    <tr>
-                      <td>Mason Porter</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                      <td className="text-right">$78,615</td>
-                    </tr>
-                    <tr>
-                      <td>Jon Porter</td>
-                      <td>Portugal</td>
-                      <td>Gloucester</td>
-                      <td className="text-right">$98,615</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
+                </CardHeader>
+                <CardBody>
+                  <Table responsive>
+                    <thead className="text-primary">
+                      <tr>
+                        <th>Updated at</th>
+                        <th >Number of beds</th>
+                        <th >Note</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      {logs.map(x =>
+                        <tr>
+                          <td>{formatRelative(new Date(x['time']), new Date())}</td>
+                          <td >{x['beds']}</td>
+                          <td >{x['desc']}</td>
+
+                        </tr>
+                      )}
+
+
+                    </tbody>
+                  </Table>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+
       </div>
     </>
   );
 }
 
-export default Tables;
+export default Icons;

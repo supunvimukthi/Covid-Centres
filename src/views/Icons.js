@@ -83,6 +83,7 @@ function Icons() {
         'beds':Number(data['beds']),
         'time':new Date().getTime(),
         'desc': data['note'],
+        'username':JSON.parse(localStorage.getItem('data'))['username']
   
       })
     })

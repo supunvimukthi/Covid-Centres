@@ -117,11 +117,12 @@ function Notifications() {
 
   const prov_dist = {"Gampaha":"Western","Colombo":"Western","Kaluthara":"Western","Jaffna":"Northern","Kilinochchi":"Northern","Mannar":"Northern","Mulativ":"Northern","Vavuniya":"Northern","Puttalam":"North Western","Kurunegala":"North Western","Anuradhapura":"North Central","Polonnaruwa":"North Central","Matale":"Central","Kandy":"Central","Nuwara Eliya":"Central","Kegalle":"Sabaragamuwa","Ratnapura":"Sabaragamuwa","Trincomalee":"Eastern","Batticaloa":"Eastern","Ampara":"Eastern","Badulla":"Uva","Monaragala":"Uva","Galle":"Southern","Matara":"Southern","Hambanthota":"Southern"}
   const dists=["Gampaha", "Colombo", "Kaluthara", "Jaffna", "Kilinochchi", "Mannar", "Mulativ", "Vavuniya", "Puttalam", "Kurunegala", "Anuradhapura", "Polonnaruwa", "Matale", "Kandy", "Nuwara Eliya", "Kegalle", "Ratnapura", "Trincomalee", "Batticaloa", "Ampara", "Badulla", "Monaragala", "Galle", "Matara", "Hambanthota"]
+  
   const handleSubmit = async e => {
     e.preventDefault();
     console.log(username,province)
     if(!name || !district || !province || !username || !password ){
-      // showToastMessage(10000,'Empty fields not allowed',ERROR)
+      notify('bc','Empty Fields are not allowed (except contact)',3)
       return;
     }
     const token = await submitData({
@@ -136,6 +137,11 @@ function Notifications() {
     if('error' in token){
       notify('bc',token['error'],3)
     }else{
+      setName('')
+      setContact(0)
+      setUsername('')
+      setPassword('')
+
       notify('bc',token['message'],2)
     }
     
@@ -163,7 +169,7 @@ function Notifications() {
 
                   <div class="col-md-12">
                     <div class="form-group"><label for="exampleForm.ControlInput1" class="form-label">Name<b>*</b></label>
-                      <input onChange={e => setName(e.target.value)} placeholder="Name of the Covid centre" type="text" id="exampleForm.ControlInput1" class="form-control" /></div>
+                      <input value={name} onChange={e => setName(e.target.value)} placeholder="Name of the Covid centre" type="text" id="exampleForm.ControlInput1" class="form-control" /></div>
                     <div class="form-group"><label for="exampleForm.ControlSelect1" class="form-label">Select Province<b>*</b></label>
                       <select value={province} onChange={e => setProvince(e.target.value)} id="exampleForm.ControlSelect1" class="form-control">
                         <option>Northern</option>
@@ -182,11 +188,11 @@ function Notifications() {
     
                       </select></div>
                       <div class="form-group"><label for="exampleForm.ControlInput1" class="form-label">Contact Number</label>
-                      <input onChange={e => setContact(e.target.value)} placeholder="Contact Number for the covid centre" type="text" id="exampleForm.ControlInput1" class="form-control" /></div>  
+                      <input value={contact} onChange={e => setContact(e.target.value)} placeholder="Contact Number for the covid centre" type="text" id="exampleForm.ControlInput1" class="form-control" /></div>  
                     <div class="form-group"><label for="exampleForm.ControlInput1" class="form-label">Username<b>*</b></label>
-                      <input onChange={e => setUsername(e.target.value)} placeholder="Username for the covid centre" type="text" id="exampleForm.ControlInput1" class="form-control" /></div>           
+                      <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Username for the covid centre" type="text" id="exampleForm.ControlInput1" class="form-control" /></div>           
                     <div class="form-group"><label for="exampleForm.ControlInput1" class="form-label">Password<b>*</b></label>
-                      <input onChange={e => setPassword(e.target.value)} placeholder="password for the covid centre" type="text" id="exampleForm.ControlInput1" class="form-control" /></div>
+                      <input value={password} onChange={e => setPassword(e.target.value)} placeholder="password for the covid centre" type="text" id="exampleForm.ControlInput1" class="form-control" /></div>
                     <div class="form-group">
                       <button onClick={handleSubmit} type="button" class="btn btn-primary">Submit</button>
                     </div>

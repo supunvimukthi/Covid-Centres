@@ -30,6 +30,14 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import {
+  format,
+  formatDistance,
+  formatRelative,
+  isThisSecond,
+  subDays,
+} from 'date-fns';
+
 // core components
 import {
   dashboard24HoursPerformanceChart,
@@ -53,6 +61,7 @@ async function getData() {
  }
 
 function Dashboard() {
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const [centres,setCentres] = useState([]);
   const [updated,setUpdated] = useState();
   const [pass,setPass] = useState("password");
@@ -194,6 +203,8 @@ function Dashboard() {
                       <th>Name</th>
                       <th>Location</th>
                       <th>Available Beds</th>
+                      <th>Updated at</th>
+                      <th>Notes</th>
                       <th >username</th>
                       <th >password</th>
                     </tr>
@@ -204,6 +215,8 @@ function Dashboard() {
                     <td>{x['name']}</td>
                     <td>{x['location']} - {x['province']}</td>
                     <td>{x['beds']}</td>
+                    <td>{x['updated']?formatDistance(new Date(x['updated']),new Date(), { addSuffix: true }):''}</td>
+                    <td>{x['desc']}</td>
                     <td >{x['username']}</td>
                     <td ><input  type={pass} id={x['username']} type="password" value={x['password']}></input><button><span onClick={()=>{
                       var elm=document.getElementById(x['username'])

@@ -25,15 +25,23 @@ import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+import LoadingOverlay from 'react-loading-overlay';
 
 import routes from "routes.js";
 
 var ps;
 
 function Dashboard(props) {
+  var active =false
+
+  function setActive(param) {
+    active=param
+    console.log(param)
+  }
   const [backgroundColor, setBackgroundColor] = React.useState("black");
   const [activeColor, setActiveColor] = React.useState("info");
   const [route, setRoute] = React.useState([]);
+  // const [active, setActive] = React.useState(false);
   const mainPanel = React.useRef();
   const location = useLocation();
   React.useEffect(() => {
@@ -67,6 +75,12 @@ function Dashboard(props) {
     setBackgroundColor(color);
   };
   return (
+    <LoadingOverlay
+    active={active}
+    spinner={true}
+    text='Loading ...'
+  >
+
     <div className="wrapper">
       <Sidebar
         {...props}
@@ -81,8 +95,9 @@ function Dashboard(props) {
             return (
               <Route
                 path={prop.layout + prop.path}
-                component={prop.component}
+                component={() => <prop.component setActive={setActive} />}
                 key={key}
+                
               />
             );
           })}
@@ -95,7 +110,7 @@ function Dashboard(props) {
         handleActiveClick={handleActiveClick}
         handleBgClick={handleBgClick}
       /> */}
-    </div>
+    </div></LoadingOverlay>
   );
 }
 

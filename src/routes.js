@@ -62,13 +62,13 @@ var routes = [
   //   component: UserPage,
   //   layout: "/admin",
   // },
-  // {
-  //   path: "/tables",
-  //   name: "Table List",
-  //   icon: "nc-icon nc-tile-56",
-  //   component: TableList,
-  //   layout: "/admin",
-  // },
+  {
+    path: "/updatebeds",
+    name: "Update Beds",
+    icon: "nc-icon nc-share-66",
+    component: TableList,
+    layout: "/admin",
+  },
   // {
   //   path: "/typography",
   //   name: "Typography",
