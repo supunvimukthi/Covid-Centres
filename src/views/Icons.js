@@ -120,6 +120,10 @@ function Icons() {
       beds,
       note
     });
+    if (('error' in token) && token['error'] == 'Signature has expired') {
+      localStorage.clear()
+      window.location.pathname = 'login'
+    }
 
     if('error' in token){
       notify('bc',token['error'],3)
@@ -128,6 +132,10 @@ function Icons() {
     }
 
     var log = await getData();
+    if (('error' in log) && log['error'] == 'Signature has expired') {
+      localStorage.clear()
+      window.location.pathname = 'login'
+    }
     setLogs(log['results'].reverse())
     setBeds(0)
     setNote("")
@@ -145,6 +153,10 @@ function Icons() {
 
   useEffect( async()=>{
     var log = await getData();
+    if (('error' in log) && log['error'] == 'Signature has expired') {
+      localStorage.clear()
+      window.location.pathname = 'login'
+    }
     setLogs(log['results'].reverse())
     // console.log(logs)
     if(logs.length==0){

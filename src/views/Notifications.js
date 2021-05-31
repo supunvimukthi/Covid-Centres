@@ -134,6 +134,11 @@ function Notifications() {
       password
     });
 
+    if (('error' in token) && token['error'] == 'Signature has expired') {
+      localStorage.clear()
+      window.location.pathname = 'login'
+    }
+
     if('error' in token){
       notify('bc',token['error'],3)
     }else{

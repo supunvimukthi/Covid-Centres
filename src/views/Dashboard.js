@@ -68,6 +68,10 @@ function Dashboard() {
   
   useEffect( async()=>{
     var log = await getData();
+    if (('error' in log) && log['error'] == 'Signature has expired') {
+      localStorage.clear()
+      window.location.pathname = 'login'
+    }
     console.log(log)
     setCentres(log['results'])
     setUpdated(new Date())

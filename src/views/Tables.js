@@ -141,7 +141,10 @@ function Icons(props) {
       beds,
       note
     });
-
+    if (('error' in token) && token['error'] == 'Signature has expired') {
+      localStorage.clear()
+      window.location.pathname = 'login'
+    }
     if ('error' in token) {
       notify('bc', token['error'], 3)
     } else {
@@ -150,6 +153,10 @@ function Icons(props) {
 
     props.setActive(true)
     var log = await getData(centre['username']);
+    if (('error' in log) && log['error'] == 'Signature has expired') {
+      localStorage.clear()
+      window.location.pathname = 'login'
+    }
     props.setActive(false)
     setLogs(log['results'].reverse())
     setBeds(0)
@@ -169,7 +176,6 @@ function Icons(props) {
   useEffect(async () => {
     props.setActive(true)
     getCentresData().then((cents) => {
-
       if (('error' in cents) && cents['error'] == 'Signature has expired') {
         localStorage.clear()
         window.location.pathname = 'login'
@@ -179,6 +185,7 @@ function Icons(props) {
       setCentre(cents['results'][1])
       console.log(centre)
       getData(cents['results'][1]['username']).then(log => {
+        
         props.setActive(false)
         console.log(log)
         setLogs(log['results'].reverse())
@@ -217,6 +224,10 @@ function Icons(props) {
                           props.setActive(true)
                           setCentre(centres.find(x => x['name'] == e.target.value))
                           getData(centres.find(x => x['name'] == e.target.value)['username']).then(log => {
+                            if (('error' in log) && log['error'] == 'Signature has expired') {
+                              localStorage.clear()
+                              window.location.pathname = 'login'
+                            }
                             console.log(log)
                             props.setActive(false)
                             setLogs(log['results'].reverse())
