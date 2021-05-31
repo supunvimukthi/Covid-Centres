@@ -127,7 +127,7 @@ function Icons() {
     }
 
     var log = await getData();
-    setLogs(log['results'])
+    setLogs(log['results'].reverse())
     setBeds(0)
     setNote("")
     // if (token){

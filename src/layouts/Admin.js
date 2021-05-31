@@ -54,7 +54,7 @@ function Dashboard(props) {
       setRoute(routes?routes.filter(x=>x.path=='/update'):routes)
       console.log(route)
     }else{
-      setRoute(routes)
+      setRoute(routes?routes.filter(x=>x.path!='/update'):routes)
     }
 
     mainPanel.current.scrollTop = 0;
