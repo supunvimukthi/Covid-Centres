@@ -73,7 +73,7 @@ function Icons() {
 
   async function submitData(data) {
     console.log(data)
-    return fetch('http://localhost:5100/v1/covid/centre/bed', {
+    return fetch('http://ec2-54-77-11-148.eu-west-1.compute.amazonaws.com:5100/v1/covid/centre/bed', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ function Icons() {
   
    async function getData() {
     // console.log(data)
-    return fetch('http://localhost:5100/v1/covid/centre/beds', {
+    return fetch('http://ec2-54-77-11-148.eu-west-1.compute.amazonaws.com:5100/v1/covid/centre/beds', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

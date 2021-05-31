@@ -75,7 +75,7 @@ function Login({setToken, setUser}) {
 
   async function loginUser(credentials) {
     console.log(credentials)
-    return fetch('http://localhost:5100/login', {
+    return fetch('http://ec2-54-77-11-148.eu-west-1.compute.amazonaws.com:5100/login', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
