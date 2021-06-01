@@ -75,13 +75,11 @@ function Login({setToken, setUser}) {
 
   async function loginUser(credentials) {
     console.log(credentials)
-    return fetch('http://ec2-34-253-239-85.eu-west-1.compute.amazonaws.com/:5100/login', {
+    return fetch('http://ec2-34-253-239-85.eu-west-1.compute.amazonaws.com:5100/login', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Basic '+btoa(credentials['username']+':'+credentials['password']),
-        'Access-Control-Allow-Origin': 'http://ec2-34-253-239-85.eu-west-1.compute.amazonaws.com/:5100/login',
-        'Access-Control-Allow-Headers':'Authorization' 
       }
     })
       .then(data => data.json()).catch((e)=>notify('bc','Invalid Login : '+String(e),3))
