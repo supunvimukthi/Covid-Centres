@@ -82,7 +82,7 @@ function Login({setToken, setUser}) {
         'Authorization': 'Basic '+btoa(credentials['username']+':'+credentials['password']),
       }
     })
-      .then(data => data.json()).catch((e)=>notify('bc','Invalid Login : '+String(e),3))
+      .then(data => data.json()).catch((e)=>console.log('bc','Invalid Login : '+String(e),3))
    }
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
@@ -99,9 +99,14 @@ function Login({setToken, setUser}) {
       password
     });
     if (token){
-      console.log(token['data'][0]['username'])
-      localStorage.setItem('data',JSON.stringify(token['data'][0]))
-      setUser(token['data'][0]['username'])
+      if(token['data'].length>0){
+        console.log(token['data'][0]['username'])
+        localStorage.setItem('data',JSON.stringify(token['data'][0]))
+        setUser(token['data'][0]['username'])
+      }else{
+        setUser(username)
+      }
+
       notify('bc','Successfully logged in as : '+username ,2)
       setToken(token['token']);
       

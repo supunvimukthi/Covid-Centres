@@ -58,11 +58,15 @@ function Dashboard(props) {
   });
   React.useEffect(() => {
     console.log(props.user)
-    if(props.user!='admin'){
+    if(props.user=='admin_dash'){
+      console.log(props.user)
+      setRoute(routes?routes.filter(x=>x.path=='/dashboard'):routes)
+      console.log(route)
+    }else if(props.user=='admin'){
+      setRoute(routes?routes.filter(x=>x.path!='/update'):routes)
+    }else{
       setRoute(routes?routes.filter(x=>x.path=='/update'):routes)
       console.log(route)
-    }else{
-      setRoute(routes?routes.filter(x=>x.path!='/update'):routes)
     }
 
     mainPanel.current.scrollTop = 0;
@@ -95,14 +99,14 @@ function Dashboard(props) {
             return (
               <Route
                 path={prop.layout + prop.path}
-                component={() => <prop.component setActive={setActive} />}
+                component={() => <prop.component user={props.user} setActive={setActive} />}
                 key={key}
                 
               />
             );
           })}
         </Switch>
-        {/* <Footer fluid /> */}
+        <Footer fluid/>
       </div>
       {/* <FixedPlugin
         bgColor={backgroundColor}

@@ -34,7 +34,10 @@ import {
   InputGroupText,
   InputGroupAddon,
   Input,
+  Button
 } from "reactstrap";
+
+import { FaBed,FaSignOutAlt } from "react-icons/fa";
 
 import routes from "routes.js";
 
@@ -126,7 +129,11 @@ function Header(props) {
           </div>
           <NavbarBrand href="/">{getBrand()}</NavbarBrand>
         </div>
-        <button onClick={logOut}>Log Out</button>
+        
+        {/* <Button onClick={logOut}><FaSignOutAlt></FaSignOutAlt>     Log Out</Button> */}
+        <div className="navbar-wrapper navbar-brand"><img height='30px' src="http://www.health.gov.lk/moh_final/english/images/logo.png" class="img-responsive" style={{float:'left', margin:'0 10px'}}></img>
+        <div style={{ 
+}}>    Ministry of Health</div></div>
         {/* <NavbarToggler onClick={toggle}>
           <span className="navbar-toggler-bar navbar-kebab" />
           <span className="navbar-toggler-bar navbar-kebab" />

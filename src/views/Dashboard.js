@@ -60,7 +60,7 @@ async function getData() {
     .then(data => data.json()).catch((e)=>console.log(e))
  }
 
-function Dashboard() {
+function Dashboard(props) {
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const [centres,setCentres] = useState([]);
   const [updated,setUpdated] = useState();
@@ -209,8 +209,8 @@ function Dashboard() {
                       <th>Available Beds</th>
                       <th>Updated at</th>
                       <th>Notes</th>
-                      <th >username</th>
-                      <th >password</th>
+                      {props.user!='admin_dash'&&<th >username</th>}
+                      {props.user!='admin_dash'&&<th >password</th>}
                     </tr>
                   </thead>
                   <tbody>
@@ -221,8 +221,8 @@ function Dashboard() {
                     <td>{x['beds']}</td>
                     <td>{x['updated']?formatDistance(new Date(x['updated']),new Date(), { addSuffix: true }):''}</td>
                     <td>{x['desc']}</td>
-                    <td >{x['username']}</td>
-                    <td ><input  type={pass} id={x['username']} type="password" value={x['password']}></input><button><span onClick={()=>{
+                    {props.user!='admin_dash'&&<td >{x['username']}</td>}
+                    {props.user!='admin_dash'&&<td ><input  type={pass} id={x['username']} type="password" value={x['password']}></input><button><span onClick={()=>{
                       var elm=document.getElementById(x['username'])
                       if(elm.type=="password"){
                         elm.type="text"
@@ -230,7 +230,7 @@ function Dashboard() {
                         elm.type="password"
                       }
                       // console.log(elm.type/)
-                    }} toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span></button></td>
+                    }} toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span></button></td>}
                   </tr>
                   ) }
                    

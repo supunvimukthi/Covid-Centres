@@ -18,15 +18,21 @@
 */
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Nav } from "reactstrap";
+import { Nav,Button } from "reactstrap";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
-
+import { FaBed,FaSignOutAlt } from "react-icons/fa";
 import logo from "logo.svg";
 
 var ps;
 
+
 function Sidebar(props) {
+  const logOut=()=>{
+    localStorage.clear()
+    window.location.pathname='login'
+  }
+
   const sidebar = React.useRef();
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
@@ -53,7 +59,7 @@ function Sidebar(props) {
     >
       <div className="logo">
         <a
-          href="https://www.creative-tim.com"
+          href=""
           className="simple-text logo-mini"
         >
           <div className="logo-img">
@@ -61,7 +67,7 @@ function Sidebar(props) {
           </div>
         </a>
         <a
-          href="https://www.creative-tim.com"
+          href=""
           className="simple-text logo-normal"
         >
           Covid Centres
@@ -88,7 +94,12 @@ function Sidebar(props) {
               </li>
             );
           })}
+
         </Nav>
+        <li style={{position: 'absolute',
+    bottom: '20px',
+    width: '100%',
+    textAlign: 'center'}} className={"active-pro"}><Button className={"active-pro"} onClick={logOut}><FaSignOutAlt></FaSignOutAlt>     Log Out</Button></li>
       </div>
     </div>
   );

@@ -26,8 +26,7 @@ function App() {
     <BrowserRouter>
     <Switch>
       <Route path="/admin" render={(props) => <AdminLayout user={user} {...props} />} />
-      {user=='admin'&&<Redirect to="/admin/dashboard" />}
-      {user!='admin'&&<Redirect to="/admin/update" />}
+      {(user=='admin'|| user=='admin_dash')?<Redirect to="/admin/dashboard" />:<Redirect to="/admin/update" />}
     </Switch>
   </BrowserRouter>
   );
