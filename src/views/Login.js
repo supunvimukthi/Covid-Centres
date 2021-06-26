@@ -1,21 +1,4 @@
-/*!
 
-=========================================================
-* Paper Dashboard React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-* Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 
 import React, { useState } from 'react';
 
@@ -75,7 +58,7 @@ function Login({setToken, setUser}) {
 
   async function loginUser(credentials) {
     console.log(credentials)
-    return fetch('http://ec2-34-253-239-85.eu-west-1.compute.amazonaws.com:5100/login', {
+    return fetch(' http://203.94.76.62:5100/login', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -113,7 +96,6 @@ function Login({setToken, setUser}) {
     }else{
       console.log('error')
       notify('bc','Invalid Login Credentials',3)
-      // showToastMessage(5000,'Login Invalid. Please check your login information',ERROR)
     }
     
   }
@@ -129,10 +111,6 @@ function Login({setToken, setUser}) {
             <Card className="demo-icons">
               <CardHeader>
                 <CardTitle tag="h5">Login</CardTitle>
-                {/* <p className="card-category">
-                  Handcrafted by our friends from{" "}
-                  <a href="https://nucleoapp.com/?ref=1712">NucleoApp</a>
-                </p> */}
               </CardHeader>
               <CardBody className="all-icons">
                 <div class="row">

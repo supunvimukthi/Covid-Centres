@@ -38,7 +38,7 @@ import {
 
 async function submitData(data) {
   console.log(data)
-  return fetch('http://ec2-34-253-239-85.eu-west-1.compute.amazonaws.com:5100/v1/covid/centre', {
+  return fetch(' http://203.94.76.62:5100/v1/covid/centre', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

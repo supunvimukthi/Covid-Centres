@@ -76,7 +76,7 @@ function Icons(props) {
 
   async function getCentresData() {
     // console.log(data)
-    return fetch('http://ec2-34-253-239-85.eu-west-1.compute.amazonaws.com:5100/v1/covid/centres', {
+    return fetch(' http://203.94.76.62:5100/v1/covid/centres', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ function Icons(props) {
 
   async function submitData(data) {
     console.log(data)
-    return fetch('http://ec2-34-253-239-85.eu-west-1.compute.amazonaws.com:5100/v1/covid/centre/bed', {
+    return fetch(' http://203.94.76.62:5100/v1/covid/centre/bed', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ function Icons(props) {
 
   async function getData(username) {
     // console.log(data)
-    return fetch('http://ec2-34-253-239-85.eu-west-1.compute.amazonaws.com:5100/v1/covid/centre/beds', {
+    return fetch(' http://203.94.76.62:5100/v1/covid/centre/beds', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
