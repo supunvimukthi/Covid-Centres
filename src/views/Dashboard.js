@@ -29,6 +29,7 @@ import {
   Table,
   Row,
   Col,
+  Button
 } from "reactstrap";
 import {
   format,
@@ -44,12 +45,12 @@ import {
   dashboardEmailStatisticsChart,
   dashboardNASDAQChart,
 } from "variables/charts.js";
-import { FaBed,FaBuilding } from "react-icons/fa";
-import { Button } from "bootstrap";
+import { FaBed,FaBuilding, FaSort, } from "react-icons/fa";
+import SmartDataTable from 'react-smart-data-table'
 
 
 async function getData() {
-  // console.log(data)
+
   return fetch(' http://203.94.76.62:5100/v1/covid/centres', {
     method: 'GET',
     headers: {
@@ -64,6 +65,7 @@ function Dashboard(props) {
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const [centres,setCentres] = useState([]);
   const [updated,setUpdated] = useState();
+  const [fullCentres,setfullCentres] = useState();
   const [pass,setPass] = useState("password");
   
   useEffect( async()=>{
@@ -72,10 +74,11 @@ function Dashboard(props) {
       localStorage.clear()
       window.location.pathname = 'login'
     }
-    console.log(log)
+
     setCentres(log['results'])
+    setfullCentres(log['results'])
     setUpdated(new Date())
-    console.log(centres)
+
     // var data=JSON.parse(localStorage.getItem('data'))
     // setLocation(data['location']+' - '+data['province'])
     // setName(data['name'])
@@ -204,16 +207,40 @@ function Dashboard(props) {
                 <Table responsive>
                   <thead className="text-primary">
                     <tr>
-                      <th>Name</th>
-                      <th>Location</th>
+                      <th>Name<Button style={{float:'right',marginRight:'20%'}} size="sm" ><span onClick={()=>{
+                      fullCentres.sort((a,b)=>a['name'].localeCompare(b['name']))
+                      
+                      setCentres(JSON.parse(JSON.stringify(fullCentres))) 
+                    }} toggle="#password-field" class="fa fa-fw fa-sort field-icon"></span></Button></th>
+                      <th>Location<Button style={{float:'right',marginRight:'20%'}} size="sm" ><span onClick={()=>{
+                      fullCentres.sort((a,b)=>a['location'].localeCompare(b['location']))
+                      
+                      setCentres(JSON.parse(JSON.stringify(fullCentres))) 
+                    }} toggle="#password-field" class="fa fa-fw fa-sort field-icon"></span></Button></th>
                       <th>Available Beds</th>
                       <th>Updated at</th>
                       <th>Notes</th>
                       {props.user!='admin_dash'&&<th >username</th>}
                       {props.user!='admin_dash'&&<th >password</th>}
+                      {props.user!='admin_dash'&&<th >remove</th>}
                     </tr>
                   </thead>
                   <tbody>
+                  <tr key='search'>
+                    <td><input placeholder='search by name' onChange={(e)=>{
+            
+                      setCentres(fullCentres.filter(x=>x['name'].toLowerCase().includes(e.target.value))) 
+                    }}></input></td>
+                    <td><input placeholder='search by location' onChange={(e)=>{
+                      setCentres(fullCentres.filter(x=>x['location'].toLowerCase().includes(e.target.value))) 
+                    }}></input></td>
+                    <td><input type='number' placeholder='search by beds' onChange={(e)=>{
+                      e.target.value==''?setCentres(fullCentres):
+                     setCentres(fullCentres.filter(x=>x['beds']!='not updated').filter(x=>(Number(e.target.value)-10) < x['beds'] && x['beds']< (Number(e.target.value)+10))) 
+                    }}></input></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
                    {centres.map(x=>
                     <tr key={x['username']}>
                     <td>{x['name']}</td>
@@ -222,16 +249,38 @@ function Dashboard(props) {
                     <td>{x['updated']?formatDistance(new Date(x['updated']),new Date(), { addSuffix: true }):''}</td>
                     <td>{x['desc']}</td>
                     {props.user!='admin_dash'&&<td >{x['username']}</td>}
-                    {props.user!='admin_dash'&&<td ><input  type={pass} id={x['username']} type="password" value={x['password']}></input><button><span onClick={()=>{
+                    {props.user!='admin_dash'&&<td ><input  type={pass} id={x['username']} type="password" value={x['password']}></input><Button size="sm"><span onClick={()=>{
                       var elm=document.getElementById(x['username'])
                       if(elm.type=="password"){
                         elm.type="text"
                       }else{
                         elm.type="password"
                       }
-                      // console.log(elm.type/)
-                    }} toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span></button></td>}
-                  </tr>
+ 
+                    }} toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span></Button></td>}
+                    {props.user!='admin_dash'&&<td><Button size="sm"><span onClick={()=>{
+                        fetch(' http://203.94.76.62:5100/v1/covid/centre/delete', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'x-access-tokens': JSON.parse(localStorage.getItem('token')), 
+                          },
+                          body:JSON.stringify({"username":x['username']})
+                        })
+                          .then(async(data) => {
+                            var log = await getData();
+                            if (('error' in log) && log['error'] == 'Signature has expired') {
+                              localStorage.clear()
+                              window.location.pathname = 'login'
+                            }
+                         
+                            setCentres(log['results'])
+                            setfullCentres(log['results'])
+                            setUpdated(new Date())
+            
+                          }).catch((e)=>console.log(e))
+                    }} toggle="#password-field" class="fa fa-fw fa-trash field-icon"></span></Button></td>}
+                  </tr> // http://203.94.76.62
                   ) }
                    
                   </tbody>

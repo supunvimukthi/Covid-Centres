@@ -72,7 +72,6 @@ function Icons() {
   };
 
   async function submitData(data) {
-    console.log(data)
     return fetch(' http://203.94.76.62:5100/v1/covid/centre/bed', {
       method: 'POST',
       headers: {
@@ -91,7 +90,7 @@ function Icons() {
    }
   
    async function getData() {
-    // console.log(data)
+
     return fetch(' http://203.94.76.62:5100/v1/covid/centre/beds', {
       method: 'GET',
       headers: {
@@ -111,11 +110,7 @@ function Icons() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    // console.log(username,password)
-    // if(!username || !password ){
-    //   showToastMessage(10000,'Empty fields not allowed',ERROR)
-    //   return;
-    // }
+
     const token = await submitData({
       beds,
       note
@@ -139,15 +134,7 @@ function Icons() {
     setLogs(log['results'].reverse())
     setBeds(0)
     setNote("")
-    // if (token){
-    //   console.log(token['data'][0]['username'])
-    //   localStorage.setItem('data',JSON.stringify(token['data'][0]))
-    //   setUser(token['data'][0]['username'])
-    //   setToken(token['token']);
-    // }else{
-    //   console.log('error')
-    //   // showToastMessage(5000,'Login Invalid. Please check your login information',ERROR)
-    // }
+
     
   }
 
@@ -158,7 +145,7 @@ function Icons() {
       window.location.pathname = 'login'
     }
     setLogs(log['results'].reverse())
-    // console.log(logs)
+
     if(logs.length==0){
       // notify('bc','No past Data available for this centre',5)
     }

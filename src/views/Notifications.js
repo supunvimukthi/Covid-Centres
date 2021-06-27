@@ -37,7 +37,7 @@ import {
 
 
 async function submitData(data) {
-  console.log(data)
+
   return fetch(' http://203.94.76.62:5100/v1/covid/centre', {
     method: 'POST',
     headers: {
@@ -120,7 +120,6 @@ function Notifications() {
   
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log(username,province)
     if(!name || !district || !province || !username || !password ){
       notify('bc','Empty Fields are not allowed (except contact)',3)
       return;

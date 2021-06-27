@@ -75,7 +75,7 @@ function Icons(props) {
   };
 
   async function getCentresData() {
-    // console.log(data)
+
     return fetch(' http://203.94.76.62:5100/v1/covid/centres', {
       method: 'GET',
       headers: {
@@ -87,7 +87,7 @@ function Icons(props) {
   }
 
   async function submitData(data) {
-    console.log(data)
+
     return fetch(' http://203.94.76.62:5100/v1/covid/centre/bed', {
       method: 'POST',
       headers: {
@@ -106,7 +106,7 @@ function Icons(props) {
   }
 
   async function getData(username) {
-    // console.log(data)
+
     return fetch(' http://203.94.76.62:5100/v1/covid/centre/beds', {
       method: 'POST',
       headers: {
@@ -132,11 +132,7 @@ function Icons(props) {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    // console.log(username,password)
-    // if(!username || !password ){
-    //   showToastMessage(10000,'Empty fields not allowed',ERROR)
-    //   return;
-    // }
+
     const token = await submitData({
       beds,
       note
@@ -161,15 +157,6 @@ function Icons(props) {
     setLogs(log['results'].reverse())
     setBeds(0)
     setNote("")
-    // if (token){
-    //   console.log(token['data'][0]['username'])
-    //   localStorage.setItem('data',JSON.stringify(token['data'][0]))
-    //   setUser(token['data'][0]['username'])
-    //   setToken(token['token']);
-    // }else{
-    //   console.log('error')
-    //   // showToastMessage(5000,'Login Invalid. Please check your login information',ERROR)
-    // }
 
   }
 
@@ -180,14 +167,14 @@ function Icons(props) {
         localStorage.clear()
         window.location.pathname = 'login'
       }
-      console.log(cents['results'][1])
+
       setCentres(cents['results'])
       setCentre(cents['results'][1])
-      console.log(centre)
+
       getData(cents['results'][1]['username']).then(log => {
         
         props.setActive(false)
-        console.log(log)
+
         setLogs(log['results'].reverse())
       })
 
@@ -228,7 +215,6 @@ function Icons(props) {
                               localStorage.clear()
                               window.location.pathname = 'login'
                             }
-                            console.log(log)
                             props.setActive(false)
                             setLogs(log['results'].reverse())
                           })

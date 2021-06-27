@@ -57,7 +57,7 @@ function Login({setToken, setUser}) {
   };
 
   async function loginUser(credentials) {
-    console.log(credentials)
+
     return fetch(' http://203.94.76.62:5100/login', {
       method: 'GET',
       headers: {
@@ -72,7 +72,6 @@ function Login({setToken, setUser}) {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log(username,password)
     if(!username || !password ){
       notify('bc','Empty fields not allowed',3)
       return;
@@ -83,7 +82,6 @@ function Login({setToken, setUser}) {
     });
     if (token){
       if(token['data'].length>0){
-        console.log(token['data'][0]['username'])
         localStorage.setItem('data',JSON.stringify(token['data'][0]))
         setUser(token['data'][0]['username'])
       }else{

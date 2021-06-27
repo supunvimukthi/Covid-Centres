@@ -36,7 +36,7 @@ function Dashboard(props) {
 
   function setActive(param) {
     active=param
-    console.log(param)
+   
   }
   const [backgroundColor, setBackgroundColor] = React.useState("black");
   const [activeColor, setActiveColor] = React.useState("info");
@@ -57,16 +57,16 @@ function Dashboard(props) {
     };
   });
   React.useEffect(() => {
-    console.log(props.user)
+
     if(props.user=='admin_dash'){
-      console.log(props.user)
+
       setRoute(routes?routes.filter(x=>x.path=='/dashboard'):routes)
-      console.log(route)
+
     }else if(props.user=='admin'){
       setRoute(routes?routes.filter(x=>x.path!='/update'):routes)
     }else{
       setRoute(routes?routes.filter(x=>x.path=='/update'):routes)
-      console.log(route)
+
     }
 
     mainPanel.current.scrollTop = 0;
